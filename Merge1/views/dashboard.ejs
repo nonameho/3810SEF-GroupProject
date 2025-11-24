@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Community Message Board</title>
+    <style>
+        /* --- Adopted CSS Variables from Login/Register Views --- */
+        :root {
+            /* Kept core colors for alerts */
+            --color-bg-deep: #0f172a; 
+            --color-red: #ef4444; 
+            --color-green: #22c55e;
+            
+            /* Primary Theme Color (Purple) */
+            --color-accent: #9333ea;
+            --color-accent-hover: #c026d3;
+            
+            /* White card specific colors (Dark text/borders on light background) */
+            --color-card-text-dark: #1f2937;
+            --color-card-muted-dark: #6b7280;
+            --color-card-input-light: #f3f4f6;
+            --color-card-border-light: #e5e7eb;
+            
+            /* Color for the main title (Black) */
+            --color-title-dark: #000000;
+        }
+        
+        /* --- Dynamic Gradient Background Styles (Copied from Login/Register) --- */
+        .dynamic-gradient-bg {
+            background: linear-gradient(-45deg, #4c0099, #7c3aed, #f472b6, #38bdf8);
+            background-size: 400% 400%;
+            animation: gradient-flow 30s ease infinite; 
+        }
+
+        @keyframes gradient-flow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        /* --- End Dynamic Gradient Styles --- */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Changed background to dark deep blue and applied dynamic-gradient-bg class to enable animation */
+            background: var(--color-bg-deep); 
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* Apply the dynamic class to the body */
+        body.dynamic-gradient-bg {
+             background: linear-gradient(-45deg, #4c0099, #7c3aed, #f472b6, #38bdf8);
+             background-size: 400% 400%;
+             animation: gradient-flow 30s ease infinite; 
+             overflow: hidden; /* Added to match the login/register view behavior */
+        }
+        /* --- Existing Dashboard Styles Below --- */
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            z-index: 10; /* Ensure container is above the background gradient */
+            position: relative; /* Ensure z-index works */
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+            /* Added flex for user/logout layout */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logout-link {
+            color: white;
+            text-decoration: none;
+            background: #ff4757;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .logout-link:hover {
+            background: #ff3742;
+        }
+
+        .input-section {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr auto;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: end;
+        }
+
+        .input-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-field label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        #nameInput, #sentenceInput, #categorySelect {
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+
+        /* Added style for the read-only username input */
+        #nameInput[readonly] {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+            color: #555;
+            font-weight: bold;
+        }
+
+        #nameInput:focus, #sentenceInput:focus, #categorySelect:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        #addSentenceBtn {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            height: fit-content;
+        }
+
+        #addSentenceBtn:hover {
+            transform: translateY(-2px);
+        }
+
+        #addSentenceBtn:active {
+            transform: translateY(0);
+        }
+
+        .filter-section {
+            padding: 25px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-box input::placeholder {
+            color: #999;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .filter-control {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .clear-filters {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .clear-filters:hover {
+            background: #5a6268;
+        }
+
+        .sentences-section {
+            padding: 30px;
+        }
+
+        .sentences-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .sentences-section h2 {
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        #sentencesCount {
+            color: #666;
+            font-size: 0.9em;
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        #sentencesList {
+            list-style: none;
+        }
+
+        .sentence-item {
+            background: #f8f9fa;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Color classes for categories */
+        .sentence-item.thoughts { border-left-color: #667eea; }
+        .sentence-item.quotes { border-left-color: #ff6b6b; }
+        .sentence-item.stories { border-left-color: #4ecdc4; }
+        .sentence-item.jokes { border-left-color: #ffd93d; }
+        .sentence-item.questions { border-left-color: #6c5ce7; }
+        .sentence-item.facts { border-left-color: #00b894; }
+        .sentence-item.other { border-left-color: #a29bfe; }
+
+        .sentence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+
+        .category-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: white;
+        }
+
+        .category-thoughts { background: #667eea; }
+        .category-quotes { background: #ff6b6b; }
+        .category-stories { background: #4ecdc4; }
+        .category-jokes { background: #ffd93d; color: #333; }
+        .category-questions { background: #6c5ce7; }
+        .category-facts { background: #00b894; }
+        .category-other { background: #a29bfe; }
+
+        .sentence-text {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .update-btn {
+            background: #0400ff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .update-btn:hover {
+            background: #8a88fb;
+        }
+
+        .delete-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #ff3742;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+            
+            .sentence-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="dynamic-gradient-bg">
+    <div class="container">
+        <div class="header">
+            <h1>📝 Community Message Board</h1>
+            <p>
+                Welcome, <%= user.username %>! <a href="/auth/logout" class="logout-link">Logout</a>
+            </p>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <div class="input-field">
+                    <label for="nameInput">Your Name</label>
+                    <input type="text" id="nameInput" value="<%= user.username %>" readonly>
+                </div>
+                <div class="input-field">
+                    <label for="categorySelect">Category</label>
+                    <select id="categorySelect">
+                        <option value="thoughts">💭 Thoughts</option>
+                        <option value="quotes">💬 Quotes</option>
+                        <option value="stories">📖 Stories</option>
+                        <option value="jokes">😂 Jokes</option>
+                        <option value="questions">❓ Questions</option>
+                        <option value="facts">🔍 Facts</option>
+                        <option value="other">📌 Other</option>
+                    </select>
+                </div>
+                <div class="input-field">
+                    <label for="sentenceInput">Your Message</label>
+                    <input type="text" id="sentenceInput" placeholder="Type your sentence here..." maxlength="500">
+                </div>
+                <button id="addSentenceBtn">Add</button>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Search messages or authors...">
+                <div class="search-info">Search through message text and author names</div>
+            </div>
+
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label for="categoryFilter">Category</label>
+                    <select id="categoryFilter" class="filter-control">
+                        <option value="all">All Categories</option>
+                        <option value="thoughts">💭 Thoughts</option>
+                        <option value="quotes">💬 Quotes</option>
+                        <option value="stories">📖 Stories</option>
+                        <option value="jokes">😂 Jokes</option>
+                        <option value="questions">❓ Questions</option>
+                        <option value="facts">🔍 Facts</option>
+                        <option value="other">📌 Other</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="userFilter">User</label>
+                    <select id="userFilter" class="filter-control">
+                        <option value="all">All Users</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sortBy">Sort By</label>
+                    <select id="sortBy" class="filter-control">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="name">User Name A-Z</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="filter-actions">
+                <button id="clearFilters" class="clear-filters">Clear All Filters</button>
+                <div class="active-filters" id="activeFilters"></div>
+            </div>
+        </div>
+
+        <div class="sentences-section">
+            <div class="sentences-header">
+                <h2>Community Messages</h2>
+                <div id="sentencesCount">0 Messages</div>
+            </div>
+            <ul id="sentencesList">
+                <li class="empty-state">No messages yet. Be the first to share!</li>
+                </ul>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>

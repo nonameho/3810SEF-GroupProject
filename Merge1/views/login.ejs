@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Live Chatting Platform</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Kept core colors for alerts */
+            --color-bg-deep: #0f172a; 
+            --color-red: #ef4444; 
+            --color-green: #22c55e;
+            
+            /* Primary Theme Color (Purple) */
+            --color-accent: #9333ea; /* Deep Violet */
+            --color-accent-hover: #c026d3; /* Vibrant Magenta for Hover */
+            
+            /* White card specific colors (Dark text/borders on light background) */
+            --color-card-text-dark: #1f2937;
+            --color-card-muted-dark: #6b7280;
+            --color-card-input-light: #f3f4f6;
+            --color-card-border-light: #e5e7eb;
+            
+            /* New color for the main title */
+            --color-title-dark: #000000;
+        }
+        
+        /* --- Dynamic Gradient Background Styles --- */
+        .dynamic-gradient-bg {
+            background: linear-gradient(-45deg, #4c0099, #7c3aed, #f472b6, #38bdf8);
+            background-size: 400% 400%;
+            animation: gradient-flow 30s ease infinite; 
+        }
+
+        @keyframes gradient-flow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        /* --- End Dynamic Gradient Styles --- */
+
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: var(--color-bg-deep); 
+            color: var(--color-text-light);
+            overflow: hidden; 
+        }
+
+        /* Applying the dynamic class to the body */
+        body.dynamic-gradient-bg {
+             background: linear-gradient(-45deg, #4c0099, #7c3aed, #f472b6, #38bdf8);
+             background-size: 400% 400%;
+             animation: gradient-flow 30s ease infinite; 
+        }
+        
+        .login-card {
+            background: #ffffff; 
+            padding: 3rem; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2); 
+            text-align: center;
+            width: 380px; 
+            border: 1px solid var(--color-card-border-light); 
+            position: relative; 
+            z-index: 10; 
+            color: var(--color-card-text-dark); 
+        }
+
+        h1 { 
+            /* Changed color to black for high contrast */
+            color: var(--color-title-dark); 
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+        }
+        .subtitle {
+            color: var(--color-card-muted-dark); 
+            font-size: 1rem;
+            margin-bottom: 2.5rem; 
+            display: block;
+        }
+        
+        form { 
+            margin-bottom: 30px; 
+            border-bottom: 1px solid var(--color-card-border-light); 
+            padding-bottom: 30px; 
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 1.25rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem; 
+            background-color: var(--color-card-input-light);
+            color: var(--color-card-text-dark); 
+            border: 1px solid transparent;
+            border-radius: 8px; 
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+        input::placeholder {
+            color: #9ca3af;
+        }
+        input:focus {
+            background-color: var(--color-card-border-light);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 1px var(--color-accent); 
+            outline: none;
+        }
+        
+        .submit-btn {
+            background-color: var(--color-accent); 
+            color: white; 
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            font-size: 1.1em;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .submit-btn:hover { 
+            background-color: var(--color-accent-hover); 
+            transform: translateY(-1px);
+        }
+
+        .separator {
+            font-size: 0.9em; 
+            color: var(--color-card-muted-dark);
+            margin: 25px 0 15px; 
+        }
+
+        .btn {
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 14px;
+            margin: 12px 0;
+            text-decoration: none;
+            color: white; 
+            border-radius: 8px;
+            font-weight: 600;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: opacity 0.3s, transform 0.1s;
+        }
+        .btn:hover { opacity: 0.9; }
+
+        .btn i {
+            margin-right: 15px;
+            font-size: 1.3em;
+        }
+        
+        .google-btn { 
+            background-color: #db4437;
+        }
+        .fb-btn { 
+            background-color: #4267B2;
+        }
+        
+        .register-link { 
+            color: var(--color-accent); 
+            font-size: 0.95em; 
+            margin-top: 30px; 
+            display: block;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .register-link:hover {
+            color: var(--color-accent-hover);
+            text-decoration: underline;
+        }
+
+        /* Styles for the message containers */
+        .message {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .error-message {
+            background-color: rgba(239, 68, 68, 0.15); 
+            color: var(--color-red);
+            border-left: 4px solid var(--color-red);
+        }
+
+        .success-message {
+            background-color: rgba(34, 197, 94, 0.15); 
+            color: var(--color-green);
+            border-left: 4px solid var(--color-green);
+        }
+
+        @media (max-width: 450px) {
+            .login-card {
+                width: 90%;
+                margin: 0 10px;
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="dynamic-gradient-bg">
+
+    <!-- Login Card (Content, z-10) -->
+    <div class="login-card">
+        <h1>Group 40</h1>
+        <span class="subtitle">Sign in to the Chat Forum</span>
+        
+        <!-- FIX 1: Display Success Message (from successful registration) -->
+        <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+            <div class="message success-message">
+                <%= successMessage %>
+            </div>
+        <% } %>
+
+        <!-- FIX 2: Display Error Message (from failed login or query parameter) -->
+        <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+            <div class="message error-message">
+                <%= errorMessage %>
+            </div>
+        <% } %>
+        
+        <form action="/auth/login" method="POST">
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Username or Email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="submit-btn">Sign In</button>
+        </form>
+
+        <p class="separator">OR</p>
+        
+        <a href="/auth/google" class="btn google-btn">
+            <i class="fab fa-google"></i> Sign in with Google
+        </a>
+        <a href="/auth/facebook" class="btn fb-btn">
+            <i class="fab fa-facebook-f"></i> Sign in with Facebook(None-functional)
+        </a>
+
+        <a href="/auth/register" class="register-link">Don't have an account? Register here</a>
+    </div>
+
+</body>
+</html>
