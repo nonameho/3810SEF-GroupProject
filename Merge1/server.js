@@ -29,6 +29,7 @@ app.use(express.static('public'));
 // Set up view engine
 app.set('view engine', 'ejs');
 
+// Print JSON responses in a more readable format
 app.set('json spaces', 2);
 
 // 2. Set up session and flash messages
