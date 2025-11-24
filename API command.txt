@@ -1,0 +1,14 @@
+//API login
+curl -c cookies.txt -X POST -H "Content-Type: application/json" \
+-d '{"username":"Tester01","password":"12345678"}' \
+"http://localhost:8099/auth/login"
+
+//API create
+curl -b cookies.txt -X POST -H "Content-Type: application/json" \
+-d '{"text":"This is a beautiful day","category":"thoughts"}' \
+http://localhost:8099/api/sentences
+
+//API read
+curl "http://localhost:8099/api/sentences"
+curl "http://localhost:8099/api/sentences/users"
+curl "http://localhost:8099/api/sentences/users/Tester01"
