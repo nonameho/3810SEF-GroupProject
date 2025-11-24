@@ -78,7 +78,6 @@ app.use('/profile', profileRoutes);
 
 // B. BASE AND REDIRECT ROUTES
 app.get('/', (req, res) => {
-    res.status(200).send('Server is running');
     
     if (req.user) {
         res.redirect('/dashboard'); 
