@@ -28,7 +28,6 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-        working-directory: ./Merge1
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -52,9 +51,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_46DF73F29B1C432E97435CBC92F458D2 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7FED02862A38459CB8D224DB04F3C3D0 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DC1618AECCF54138A90CADD0FE94AA15 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C12F44B94A544F989892423A8BD98259 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FC28104106964F1E8B308C36A9601496 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_D4250FF295EF4FFAAF012AEDAE600DA2 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -63,5 +62,4 @@ jobs:
           app-name: 'sample-deploy-groupproject'
           slot-name: 'Production'
           package: .
-
           
